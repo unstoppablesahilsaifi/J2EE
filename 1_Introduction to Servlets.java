@@ -46,5 +46,4 @@ Explanation:
 <servlet> defines the servlet class.
 <servlet-mapping> binds it to a URL pattern (/hello).
 When user visits http://localhost:8080/YourApp/hello, it invokes HelloServlet.
-
-
+.
