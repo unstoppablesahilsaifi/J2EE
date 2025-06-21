@@ -109,3 +109,134 @@ session.setMaxInactiveInterval(60 * 10); // 10 minutes
 | `getAttribute()` | Retrieves stored data                      |
 | `invalidate()`   | Logs out user                              |
 | Session timeout  | Auto logout after idle time                |
+
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+Best Example for session (Login & Logout)
+
+    Bilkul! Ab mai aapko **J2EE (Java EE / Jakarta EE)** ka ek simple **session management** example dikhata hoon jisme:
+
+* User login karega
+* Server session banayega
+* Session me username store hoga
+* Logout karne par session destroy hoga
+
+### 🧾 Tools:
+
+* Servlet (J2EE)
+* JSP (view)
+* Apache Tomcat (server)
+* No database (abhi ke liye static login)
+
+### 1. **login.html** (Login form – static HTML)
+
+```html
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login Page</title>
+</head>
+<body>
+    <form action="LoginServlet" method="post">
+        Username: <input type="text" name="username" />
+        <input type="submit" value="Login" />
+    </form>
+</body>
+</html>
+
+### 2. **LoginServlet.java** (Login logic + session create)
+
+```java
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+public class LoginServlet extends HttpServlet {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        String username = request.getParameter("username");
+
+        // Check username (for demo purposes, no password or DB)
+        if (username != null && !username.isEmpty()) {
+            HttpSession session = request.getSession(); // Create session
+            session.setAttribute("username", username); // Store username
+            response.sendRedirect("welcome.jsp");
+        } else {
+            response.sendRedirect("login.html"); // invalid, retry
+        }
+    }
+}
+
+### 3. **welcome.jsp** (Session check and greet user)
+
+```jsp
+<%@ page import="javax.servlet.http.*,javax.servlet.*" %>
+<%
+    HttpSession session = request.getSession(false);
+    String username = (session != null) ? (String) session.getAttribute("username") : null;
+
+    if (username == null) {
+        response.sendRedirect("login.html"); // session expired or not logged in
+    } else {
+%>
+    <h2>Welcome, <%= username %>!</h2>
+    <a href="LogoutServlet">Logout</a>
+<%
+    }
+%>
+
+
+### 4. **LogoutServlet.java** (Logout logic)
+
+```java
+import java.io.*;
+import javax.servlet.*;
+import javax.servlet.http.*;
+
+public class LogoutServlet extends HttpServlet {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        HttpSession session = request.getSession(false); // get existing session
+        if (session != null) {
+            session.invalidate(); // destroy session
+        }
+
+        response.sendRedirect("login.html"); // redirect to login
+    }
+}
+### 5. **web.xml** (Deployment descriptor)
+
+```xml
+<web-app>
+    <servlet>
+        <servlet-name>LoginServlet</servlet-name>
+        <servlet-class>LoginServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LoginServlet</servlet-name>
+        <url-pattern>/LoginServlet</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>LogoutServlet</servlet-name>
+        <servlet-class>LogoutServlet</servlet-class>
+    </servlet>
+
+    <servlet-mapping>
+        <servlet-name>LogoutServlet</servlet-name>
+        <url-pattern>/LogoutServlet</url-pattern>
+    </servlet-mapping>
+</web-app>
+
+* User fills `login.html` → form submit to `LoginServlet`
+* Servlet creates **session** and stores username
+* JSP (`welcome.jsp`) checks session and greets user
+* Logout servlet clears session
+
