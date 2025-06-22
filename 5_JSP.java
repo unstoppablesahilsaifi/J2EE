@@ -86,3 +86,105 @@ Sum is: 30
 Result of multiplication is: 20
 Page accessed 1 time(s).
 
+
+********************************************************************************************************************************************************************************************************************
+********************************************************************************************************************************************************************************************************************
+********************************************************************************************************************************************************************************************************************
+
+ 
+ 1. Directive Tags
+These provide global information about the JSP page and affect the overall structure.
+
+<%@ page %> – Defines page-dependent attributes like language, contentType, errorPage, etc.
+Example: <%@ page language="java" contentType="text/html" %>
+
+<%@ include %> – Includes a static file at page translation time.
+Example: <%@ include file="header.jsp" %>
+
+<%@ taglib %> – Declares a tag library, typically used with JSTL or custom tags.
+Example: <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+
+Bilkul! Aapko JSP ke ye 3 **Directive Tags** easy tarike se samjhaata hoon, jisme real-life example aur use-case ho.
+
+---
+
+## ✅ 1. `<%@ page %>` – **Page Directive**
+
+### Kya karta hai?
+
+Ye JSP page ka configuration set karta hai. Jaise:
+
+* Kaunsi programming language use karni hai (`language="java"`)
+* Output kis type ka hoga (`contentType="text/html"`)
+* Agar error aaye to kis page pe bhejna hai (`errorPage`)
+
+### Example:
+
+```jsp
+<%@ page language="java" contentType="text/html" %>
+<html>
+  <body>
+    <h1>Hello from JSP Page!</h1>
+  </body>
+</html>
+```
+
+### Real-life Use:
+
+* Tum JSP page ka output HTML, XML, ya JSON bana sakte ho.
+* Agar kisi file me syntax error ho to `errorPage` specify kar sakte ho.
+
+```jsp
+<%@ page errorPage="errorPage.jsp" %>
+```
+
+---
+
+## ✅ 2. `<%@ include %>` – **Include Directive**
+
+### Kya karta hai?
+
+Iska use kisi **static JSP file ko is page me include karne ke liye** hota hai — jaise header, footer, navbar.
+
+### Example:
+
+```jsp
+<%@ include file="header.jsp" %>
+<h1>Welcome to my website!</h1>
+<%@ include file="footer.jsp" %>
+```
+
+### Real-life Use:
+
+Socho tumhare 10 pages hain aur sab me same header/footer hai — to har page me likhne ki jagah tum `include` se reuse kar sakte ho.
+
+📝 Note: Ye **compile time** pe include hota hai (matlab page translate hone se pehle hi code add ho jaata hai).
+
+---
+
+## ✅ 3. `<%@ taglib %>` – **Tag Library Directive**
+
+### Kya karta hai?
+
+JSP me **JSTL ya custom tag libraries** use karne ke liye `taglib` declare karte hain. JSTL = JavaServer Pages Standard Tag Library.
+
+### Example:
+
+```jsp
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
+<c:if test="${user.loggedIn}">
+    <h2>Welcome, ${user.name}!</h2>
+</c:if>
+```
+
+* `uri` batata hai ki kaunsi library use ho rahi hai.
+* `prefix="c"` ka matlab hai tum `<c:...>` wale tags use karoge.
+
+
+## 🔄 Summary (One Line Each):
+
+* **`<%@ page %>`** – Page ka config set karta hai (language, error page, etc.)
+* **`<%@ include %>`** – Static file ko compile time pe page me jodta hai.
+* **`<%@ taglib %>`** – JSTL/custom tags ko enable karta hai JSP page me.
